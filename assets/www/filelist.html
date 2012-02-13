@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width" >
+<title>Sdcard文件夹</title>
+
+</head>
+
+<body>
+<nav id="navigation" class="navigation">
+	<div id="titleBar"></div>
+</nav>
+<div id="filelist">
+	
+</div>
+
+
+</body>
+</html>
+
+<style type="text/css">
+.navigation{
+	background-color:#FF0000;
+	}
+</style>
+<script type="text/javascript" charset="utf-8">
+function loadRootList(){
+    var sdcardExited = window.FileUtils.checkSdcardExists();
+	if(sdcardExited == true){
+		//alert("sdCard existed!");
+    	var root = window.FileUtils.getRoot();
+		setTitle(root);
+		window.FileUtils.getListName(root)
+		//var listFileName = window.FileUtils.getListName(root);
+		//alert(listFileName);
+	}else{
+		alert("sdCard not existed!");
+		setTitle("sdCard not existed!");
+	}
+}
+
+function loadList(aPath){
+    var dirName = window.FileUtils.getListName(aPath)
+	setTitle(dirName);
+}
+
+function setTitle(title){
+	var titleBar = document.getElementById("titleBar");
+	titleBar.innerHTML = title;
+}
+
+function refreshList(jsonFileList){
+	var objs = eval(jsonFileList);
+//    alert(objs.length); // 2
+//    alert(objs[0].name);// 'n_2'
+    var filelistDiv = document.getElementById("filelist");
+	filelistDiv.innerHTML = "";
+	for(var i = 0; i<objs.length; i++){
+		var li = document.createElement("li");
+		var a = document.createElement('a');
+		var path = objs[i].aPath;
+		a.setAttribute("onclick","loadList('"+path+"')");
+		a.innerHTML = objs[i].name;
+		li.appendChild(a);
+		filelistDiv.appendChild(li);
+	}
+}
+
+window.onload = loadRootList();
+</script>
